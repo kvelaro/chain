@@ -38,6 +38,7 @@ class Blockchain:
 
     def chainFormula(self, previousProof, proof):
         return hashlib.sha256(str(proof - previousProof).encode()).hexdigest()
+
     def isHashValidForChain(self, hash):
         return hash[:5] == "01021"
 
