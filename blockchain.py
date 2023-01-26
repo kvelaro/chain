@@ -42,11 +42,11 @@ class Blockchain:
     def isHashValidForChain(self, hash):
         return hash[:5] == "01021"
 
-    def isChainValid(self, chain):
-        previousBlock = chain[0]
+    def isChainValid(self):
+        previousBlock = self.chain[0]
         blockIndex = 1
-        while blockIndex < len(chain):
-            block = chain[blockIndex]
+        while blockIndex < len(self.chain):
+            block = self.chain[blockIndex]
             if block['previousHash'] != self.hash(previousBlock):
                 return False
             hashOperation = self.chainFormula(previousBlock['proof'], block['proof'])
@@ -60,8 +60,8 @@ class Blockchain:
 blockchain = Blockchain()
 
 app = Flask(__name__)
-@app.route('/mine', methods = ['GET'])
 
+@app.route('/mine', methods = ['GET'])
 def mine():
     previousBlock = blockchain.getPreviousBlock()
     previousProof = previousBlock['proof']
@@ -86,7 +86,7 @@ def chain():
 
 @app.route('/valid', methods = ['GET'])
 def valid():
-    isValid = blockchain.isChainValid(blockchain.chain)
+    isValid = blockchain.isChainValid()
     if isValid:
         response = {"message": "The chain is valid"}
     else:
